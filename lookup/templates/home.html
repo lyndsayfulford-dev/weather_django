@@ -1,10 +1,78 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        
+        <!-- SIDEBAR: US Code Catalog -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">🇺🇸 US Testing Codes</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <!-- Clicking any button automatically submits that code to views.py -->
+                    <form action="{% url 'home' %}" method="POST" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" name="reportingAreaCode" value="nv013" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if reportingAreaCode == 'nv013' %}active{% endif %}">
+                            Boulder City, NV <span class="badge badge-secondary">nv013</span>
+                        </button>
+                        <button type="submit" name="reportingAreaCode" value="ca064" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if reportingAreaCode == 'ca064' %}active{% endif %}">
+                            Napa Valley, CA <span class="badge badge-secondary">ca064</span>
+                        </button>
+                        <button type="submit" name="reportingAreaCode" value="wa145" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if reportingAreaCode == 'wa145' %}active{% endif %}">
+                            Seattle, WA <span class="badge badge-secondary">wa145</span>
+                        </button>
+                        <button type="submit" name="reportingAreaCode" value="ny001" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if reportingAreaCode == 'ny001' %}active{% endif %}">
+                            New York City, NY <span class="badge badge-secondary">ny001</span>
+                        </button>
+                        <button type="submit" name="reportingAreaCode" value="tx005" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if reportingAreaCode == 'tx005' %}active{% endif %}">
+                            Austin, TX <span class="badge badge-secondary">tx005</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body bg-light text-muted small">
+                    <p class="mb-0">Click any location above to load live data, or type a custom code in the search bar.</p>
+                </div>
+            </div>
+        </div>
 
+        <!-- MAIN CONTENT AREA: Search and Display Results -->
+        <div class="col-md-8 col-lg-9">
+            
+            <!-- Search Form Bar -->
+            <form action="{% url 'home' %}" method="POST" class="form-inline mb-4">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2 col-sm-8" type="search" placeholder="Enter Reporting Area Code (e.g., nv013)" name="reportingAreaCode" value="{{ reportingAreaCode|default:'' }}">
+                <button class="btn btn-outline-success col-sm-3 mt-2 mt-sm-0" type="submit">Search</button>
+            </form>
 
-<h1>Hello World</h1>
+            {% if reportingAreaCode %}
+                <p class="text-muted">Viewing data snapshot for: <strong>{{ reportingAreaCode }}</strong></p>
+            {% endif %}
 
+            <!-- API Result Card Output -->
+            {% if api %}
+                {% if api == "Error..." %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Lookup Error:</strong> Could not retrieve data for that specific area code. Please verify the code and try again.
+                    </div>
+                {% else %}
+                    <div class="jumbotron {{ category_color }} shadow-sm">
+                        <h1 class="display-4 font-weight-bold">{{ api.0.aqiCategoryName }}<br/></h1>
+                        <p class="lead">Current {{ api.0.reportingAreaName }} Air Quality: <span class="badge badge-dark">{{ api.0.nowcastAQI }}</span></p>
+                        <hr class="my-4" style="border-top-color: rgba(0,0,0,0.1);">
+                        <p class="h5 font-weight-normal">{{ category_description }}</p>
+                    </div>
+                {% endif %}
+            {% endif %}
 
+        </div>
+
+    </div>
+</div>
 {% endblock %}
+	
+
+
+

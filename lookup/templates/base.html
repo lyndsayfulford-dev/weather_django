@@ -9,6 +9,47 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
     <title>Weather</title>
+    <style>
+  /* Custom AirNow AQI Background Colors */
+  .good {
+    background-color: #00e400 !important;
+    color: #000000 !important;
+  }
+  .moderate {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+  }
+  .usg {
+    background-color: #ff7e00 !important;
+    color: #ffffff !important;
+  }
+  .unhealthy {
+    background-color: #ff0000 !important;
+    color: #ffffff !important;
+  }
+  .very-unhealthy {
+    background-color: #8f3f97 !important;
+    color: #ffffff !important;
+  }
+  .hazardous {
+    background-color: #7e0023 !important;
+    color: #ffffff !important;
+  }
+  .normal {
+    background-color: #e9ecef !important;
+    color: #212529 !important;
+  }
+
+  /* Optional smooth styling adjustments for Jumbotron containers */
+  .jumbotron {
+    padding: 2rem 2rem;
+    margin-bottom: 2rem;
+    border-radius: 0.3rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+
   </head>
   <body>
   	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -23,10 +64,11 @@
         <a class="nav-link" href="{% url 'about' %}">About Me</a>
       </li> 
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
-    </form>
+<form action="{% url 'home' %}" method="POST" class="form-inline">
+    {% csrf_token %} <!-- Never forget this in Django forms! -->
+    <input class="form-control" type="search" placeholder="Enter Reporting Area Code (e.g., nv013)" name="reportingAreaCode">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
   </div>
 </nav>
   	<br/>
